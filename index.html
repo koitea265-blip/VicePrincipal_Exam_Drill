@@ -47,32 +47,40 @@
         display: flex;
         flex-direction: column;
         position: relative;
+        /* スマホで高さがいっぱいの時の調整 */
+        max-height: 95vh; 
+    }
+
+    @media (max-width: 600px) {
+        .app-container {
+            margin: 0;
+            border-radius: 0;
+            height: 100vh;
+            max-height: 100vh;
+        }
     }
 
     /* Header */
     header {
         background-color: var(--primary);
         color: white;
-        padding: 10px 15px; /* パディングを少し縮小 */
+        padding: 10px 15px; 
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: nowrap; /* 折り返し禁止 */
-        gap: 10px;
+        flex-shrink: 0; /* 縮小させない */
     }
 
     .header-left {
         display: flex;
         align-items: center;
-        /* gap: 15px;  ホームボタン削除により不要 */
-        overflow: hidden; /* はみ出し防止 */
+        overflow: hidden; 
+        flex: 1; /* 左側を伸ばす */
     }
-
-    /* ホームボタンはヘッダーから削除しました */
 
     h1 {
         margin: 0;
-        font-size: 1.0rem; /* スマホ用に少し小さく */
+        font-size: 1.0rem; 
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -85,6 +93,7 @@
         background: rgba(255,255,255,0.1);
         padding: 2px 8px;
         border-radius: 10px;
+        margin-left: 10px;
     }
 
     /* Content Area */
@@ -93,7 +102,8 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
+        overflow-y: auto; /* ここでスクロール */
+        -webkit-overflow-scrolling: touch;
     }
 
     /* Footer */
@@ -101,16 +111,17 @@
         background-color: #f8f9fa;
         color: #7f8c8d;
         text-align: center;
-        padding: 15px;
-        font-size: 0.9rem;
+        padding: 10px;
+        font-size: 0.8rem;
         border-top: 1px solid #eee;
         font-weight: bold;
+        flex-shrink: 0;
     }
 
     /* Start Screen */
     #start-screen {
         text-align: center;
-        padding: 40px 20px;
+        padding: 20px;
     }
 
     /* タイトルスタイル */
@@ -118,25 +129,20 @@
         color: #d35400;
         border-bottom: 3px solid #e67e22;
         padding-bottom: 15px;
-        margin-bottom: 30px;
-        font-size: 2.4rem; 
+        margin-bottom: 20px;
+        font-size: 2.0rem; 
         line-height: 1.3;
         font-weight: 800;
     }
 
     @media (max-width: 600px) {
         .main-title {
-            font-size: 1.6rem;
-        }
-        .app-container {
-            margin: 0;
-            border-radius: 0;
-            height: 100vh;
+            font-size: 1.5rem;
         }
     }
     
     .intro-text {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         color: #666;
         text-align: left;
     }
@@ -158,7 +164,7 @@
         color: white;
         border: none;
         border-radius: 8px;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         font-weight: bold;
         cursor: pointer;
         transition: background 0.2s, transform 0.1s;
@@ -171,7 +177,7 @@
 
     .btn-resume {
         background-color: var(--resume-btn);
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
     .btn-resume:hover {
@@ -180,7 +186,7 @@
 
     .btn-reset {
         background-color: var(--secondary-btn);
-        font-size: 1.1rem;
+        font-size: 1.0rem;
     }
 
     .btn-reset:hover {
@@ -188,10 +194,10 @@
     }
 
     .disclaimer {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #7f8c8d;
         margin-top: 20px;
-        line-height: 1.5;
+        line-height: 1.4;
         background-color: #f2f2f2;
         padding: 10px;
         border-radius: 4px;
@@ -201,7 +207,7 @@
     /* Question Screen */
     #question-screen {
         display: none;
-        height: 100%; /* コンテンツ領域いっぱい使う */
+        /* コンテンツ領域内での表示にするためheight:100%は削除 */
     }
 
     .meta-info {
@@ -226,9 +232,7 @@
         font-weight: bold;
     }
 
-    /* ★ここがポイント：問題文エリアのスクロール化 
-       スマホで解説を見ながら問題文も見られるように高さ制限をつける
-    */
+    /* 問題文エリア：高さ制限・スクロール対応 */
     .question-text {
         font-size: 1.1rem;
         line-height: 1.8;
@@ -240,9 +244,9 @@
         box-shadow: 0 3px 6px rgba(0,0,0,0.05);
         
         /* 高さ制限とスクロール */
-        max-height: 30vh; /* 画面の30%程度に制限 */
+        max-height: 35vh; /* 画面の35%程度に制限 */
         overflow-y: auto; /* 縦スクロール */
-        -webkit-overflow-scrolling: touch; /* スマホでの慣性スクロール */
+        -webkit-overflow-scrolling: touch; 
     }
 
     .blank-placeholder {
@@ -257,6 +261,8 @@
 
     .input-area {
         margin-bottom: 15px;
+        /* 入力欄より下をスクロールさせるためのマージン確保 */
+        padding-bottom: 5px; 
     }
 
     input[type="text"] {
@@ -290,6 +296,8 @@
         font-size: 1.1rem;
         font-weight: bold;
         cursor: pointer;
+        /* スマホでのタップしやすさ */
+        min-height: 48px;
     }
 
     .btn-submit:disabled {
@@ -305,7 +313,7 @@
         padding-top: 15px;
         animation: fadeIn 0.3s ease;
         /* 解説部分も長くなったらスクロールできるように */
-        padding-bottom: 20px;
+        padding-bottom: 40px; /* 下部に余白 */
     }
 
     @keyframes fadeIn {
@@ -362,6 +370,7 @@
     .feedback-actions {
         display: flex;
         gap: 10px;
+        margin-bottom: 20px;
     }
 
     .btn-next {
@@ -374,6 +383,7 @@
         font-size: 1.1rem;
         font-weight: bold;
         cursor: pointer;
+        min-height: 48px;
     }
 
     .btn-home-action {
@@ -386,6 +396,7 @@
         font-size: 1.0rem;
         font-weight: bold;
         cursor: pointer;
+        min-height: 48px;
     }
 
     .btn-home-action:hover {
@@ -529,6 +540,7 @@
                 ここに問題文が表示されます。
             </div>
 
+            <!-- スマホキーボード対策：問題文を見ながら入力できるように -->
             <div class="input-area">
                 <input type="text" id="user-input" placeholder="答えを入力..." autocomplete="off">
             </div>
@@ -597,7 +609,9 @@
     });
     document.addEventListener('copy', function(e) { e.preventDefault(); });
     document.addEventListener('cut', function(e) { e.preventDefault(); });
-    document.addEventListener('paste', function(e) { e.preventDefault(); });
+    document.addEventListener('paste', function(e) { 
+        e.preventDefault(); 
+    });
 
 
     // --- 100問のデータ (全データ) ---
@@ -635,7 +649,7 @@
         { id: 30, category: "学校保健安全法", importance: 5, text: "学校においては、...職員の研修その他学校における安全に関する事項について(　30　)を策定し、これを実施しなければならない。（第27条）", answer: "学校安全計画", explanation: "学校における安全管理の中核となる計画です。施設設備の点検、安全教育、避難訓練などを包括的に定めます。策定と実施は法的義務です。<br><span class='point-label'>【学習のポイント】</span>安全計画には「通学」の安全に関することも含まれます。PDCAサイクルに基づいて毎年度見直しを行うことが求められます。" },
         { id: 31, category: "学校保健安全法", importance: 5, text: "学校においては、...危険等が発生した際に職員がとるべき措置の具体的内容及び手順を定めた(　31　)を作成するものとする。（第29条）", answer: "危険等発生時対処要領", explanation: "いわゆる「危機管理マニュアル」の作成義務化（H31改正）規定です。不審者侵入、災害、事故等の緊急時に、誰がどう動くかを具体的に定めておく必要があります。<br><span class='point-label'>【学習のポイント】</span>「作成するものとする」という表現ですが、法的義務として解釈されます。教職員への周知徹底と、これに基づく訓練の実施が不可欠です。" },
         { id: 32, category: "学校保健安全法", importance: 3, text: "学校においては、毎学年、6月30日までに、児童生徒等の(　32　)を行わなければならない。（第13条）", answer: "健康診断", explanation: "定期健康診断の実施時期を定めています。「6月30日まで」という日付は頻出です。身体計測、視力、聴力、内科検診などが含まれます。<br><span class='point-label'>【学習のポイント】</span>就学時の健康診断（入学前年の11月30日まで）や、職員の健康診断（安衛法に基づく）とは区別して覚えましょう。" },
-        { id: 33, category: "学校保健安全法", importance: 2, text: "学校には、学校医、学校歯科医及び(　33　)を置かなければならない。（大学を除く）（第23条）", answer: "学校薬剤師", explanation: "学校環境衛生（水質、換気、照明など）の維持管理のため、学校薬剤師の設置が義務付けられています.医師・歯科医だけでなく薬剤師も必置である点がポイントです。<br><span class='point-label'>【学習のポイント】</span>これらは非常勤職員として委嘱されることが一般的です。学校保健安全計画の立案にも参画します。" },
+        { id: 33, category: "学校保健安全法", importance: 2, text: "学校には、学校医、学校歯科医及び(　33　)を置かなければならない。（大学を除く）（第23条）", answer: "学校薬剤師", explanation: "学校環境衛生（水質、換気、照明など）の維持管理のため、学校薬剤師の設置が義務付けられています.医師・歯科医だけでなく薬剤師も必置である点がポイントです。<br><span class='point-label'>【学習のポイント】</span>これらは非常勤職員として委嘱されることが一般的です.学校保健安全計画の立案にも参画します。" },
         { id: 34, category: "学校保健安全法", importance: 3, text: "校長は、感染症にかかつており、かかつている疑いがあり、又はかかるおそれのある児童生徒等があるときは、...出席を(　34　)させることができる。（第19条）", answer: "停止", explanation: "感染症拡大防止のための「出席停止」措置です。この権限は「校長」にあります（性行不良による出席停止は教育委員会）。区別して覚えてください。<br><span class='point-label'>【学習のポイント】</span>出席停止期間は「欠席」扱いにはならず、「出席停止・忌引等」として処理されます。指導要録上の取り扱いも確認しましょう。" },
         { id: 35, category: "いじめ防止法", importance: 5, text: "いじめとは、...心理的又は(　35　)な影響を与える行為であって、当該行為の対象となった児童等が心身の苦痛を感じているものをいう。", answer: "物理的", explanation: "いじめの定義です。「一定の人的関係にある」こと、「心理的又は物理的な攻撃」であること、そして被害者が「心身の苦痛を感じている」ことが要件です。<br><span class='point-label'>【学習のポイント】</span>場所は学校内外を問いません。インターネット上の行為も含まれます。「けんか」や「ふざけ」に見えても、被害者が苦痛を感じていればいじめとなります。" },
         { id: 36, category: "いじめ防止法", importance: 4, text: "学校は、...当該学校の複数の教職員、心理、福祉等に関する専門的な知識を有する者その他の関係者により構成される(　36　)を置くものとする。（第22条）", answer: "いじめ対策組織", explanation: "学校におけるいじめ防止の中核となる常設組織です。「学校いじめ対策委員会」などと呼ばれます。教員だけで抱え込まず、組織的に対応するための仕組みです。<br><span class='point-label'>【学習のポイント】</span>スクールカウンセラー等の専門家を加えることが推奨されています。事案発生時だけでなく、未然防止や早期発見のための活動も行います。" },
