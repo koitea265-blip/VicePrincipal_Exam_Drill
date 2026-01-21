@@ -53,45 +53,38 @@
     header {
         background-color: var(--primary);
         color: white;
-        padding: 15px 20px;
+        padding: 10px 15px; /* パディングを少し縮小 */
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: nowrap; /* 折り返し禁止 */
+        gap: 10px;
     }
 
     .header-left {
         display: flex;
         align-items: center;
-        gap: 15px;
+        /* gap: 15px;  ホームボタン削除により不要 */
+        overflow: hidden; /* はみ出し防止 */
     }
 
-    /* ホームボタンのスタイル */
-    .btn-home {
-        background: rgba(255, 255, 255, 0.2);
-        border: none;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition: background 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .btn-home:hover {
-        background: rgba(255, 255, 255, 0.4);
-    }
+    /* ホームボタンはヘッダーから削除しました */
 
     h1 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 1.0rem; /* スマホ用に少し小さく */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .progress-info {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: bold;
+        white-space: nowrap;
+        background: rgba(255,255,255,0.1);
+        padding: 2px 8px;
+        border-radius: 10px;
     }
 
     /* Content Area */
@@ -126,14 +119,19 @@
         border-bottom: 3px solid #e67e22;
         padding-bottom: 15px;
         margin-bottom: 30px;
-        font-size: 2.6rem; 
+        font-size: 2.4rem; 
         line-height: 1.3;
         font-weight: 800;
     }
 
     @media (max-width: 600px) {
         .main-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
+        }
+        .app-container {
+            margin: 0;
+            border-radius: 0;
+            height: 100vh;
         }
     }
     
@@ -173,7 +171,7 @@
 
     .btn-resume {
         background-color: var(--resume-btn);
-        font-size: 1.5rem; /* 再開ボタンは目立たせる */
+        font-size: 1.5rem;
     }
     
     .btn-resume:hover {
@@ -203,6 +201,7 @@
     /* Question Screen */
     #question-screen {
         display: none;
+        height: 100%; /* コンテンツ領域いっぱい使う */
     }
 
     .meta-info {
@@ -227,15 +226,23 @@
         font-weight: bold;
     }
 
+    /* ★ここがポイント：問題文エリアのスクロール化 
+       スマホで解説を見ながら問題文も見られるように高さ制限をつける
+    */
     .question-text {
         font-size: 1.1rem;
         line-height: 1.8;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         border: 3px solid var(--accent);
         border-radius: 10px;
         background-color: #eef9ff;
-        padding: 20px;
+        padding: 15px;
         box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        
+        /* 高さ制限とスクロール */
+        max-height: 30vh; /* 画面の30%程度に制限 */
+        overflow-y: auto; /* 縦スクロール */
+        -webkit-overflow-scrolling: touch; /* スマホでの慣性スクロール */
     }
 
     .blank-placeholder {
@@ -249,7 +256,7 @@
     }
 
     .input-area {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     input[type="text"] {
@@ -293,10 +300,12 @@
     /* Feedback Section */
     #feedback-section {
         display: none;
-        margin-top: 20px;
+        margin-top: 15px;
         border-top: 1px solid #eee;
-        padding-top: 20px;
+        padding-top: 15px;
         animation: fadeIn 0.3s ease;
+        /* 解説部分も長くなったらスクロールできるように */
+        padding-bottom: 20px;
     }
 
     @keyframes fadeIn {
@@ -307,7 +316,7 @@
     .result-header {
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .result-icon {
@@ -332,7 +341,7 @@
 
     .explanation-box {
         background-color: #f8f9fa;
-        padding: 20px;
+        padding: 15px;
         border-radius: 6px;
         font-size: 0.95rem;
         line-height: 1.7;
@@ -388,7 +397,7 @@
         color: #856404;
         padding: 10px;
         border-radius: 4px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         font-size: 0.9rem;
         display: flex;
         align-items: center;
@@ -469,8 +478,7 @@
 <div class="app-container">
     <header>
         <div class="header-left">
-            <button class="btn-home" onclick="goHome()" title="トップへ戻る">🏠</button>
-            <h1>教頭試験対策ドリル</h1>
+            <h1>教頭試験（管理職選考試験）対策ドリル</h1>
         </div>
         <div class="progress-info" id="progress-display">準備中...</div>
     </header>
@@ -490,7 +498,7 @@
                     <li><strong>全100問の完全習得を目指しましょう。</strong></li>
                     <li>間違えた問題は、<strong>ランダムに数問後</strong>に再出題されます。</li>
                     <li>数字は全角・半角どちらでも正解になります。</li>
-                    <li><strong>※オフラインでも動作します。</strong></li>
+                    <li><strong>※オートセーブ機能により、ブラウザを閉じても続きから再開できます。</strong></li>
                 </ul>
             </div>
 
@@ -516,6 +524,7 @@
                 <span class="importance-stars" id="q-stars"></span>
             </div>
             
+            <!-- 問題文エリア：高さ制限・スクロール対応 -->
             <div class="question-text" id="q-text">
                 ここに問題文が表示されます。
             </div>
@@ -626,7 +635,7 @@
         { id: 30, category: "学校保健安全法", importance: 5, text: "学校においては、...職員の研修その他学校における安全に関する事項について(　30　)を策定し、これを実施しなければならない。（第27条）", answer: "学校安全計画", explanation: "学校における安全管理の中核となる計画です。施設設備の点検、安全教育、避難訓練などを包括的に定めます。策定と実施は法的義務です。<br><span class='point-label'>【学習のポイント】</span>安全計画には「通学」の安全に関することも含まれます。PDCAサイクルに基づいて毎年度見直しを行うことが求められます。" },
         { id: 31, category: "学校保健安全法", importance: 5, text: "学校においては、...危険等が発生した際に職員がとるべき措置の具体的内容及び手順を定めた(　31　)を作成するものとする。（第29条）", answer: "危険等発生時対処要領", explanation: "いわゆる「危機管理マニュアル」の作成義務化（H31改正）規定です。不審者侵入、災害、事故等の緊急時に、誰がどう動くかを具体的に定めておく必要があります。<br><span class='point-label'>【学習のポイント】</span>「作成するものとする」という表現ですが、法的義務として解釈されます。教職員への周知徹底と、これに基づく訓練の実施が不可欠です。" },
         { id: 32, category: "学校保健安全法", importance: 3, text: "学校においては、毎学年、6月30日までに、児童生徒等の(　32　)を行わなければならない。（第13条）", answer: "健康診断", explanation: "定期健康診断の実施時期を定めています。「6月30日まで」という日付は頻出です。身体計測、視力、聴力、内科検診などが含まれます。<br><span class='point-label'>【学習のポイント】</span>就学時の健康診断（入学前年の11月30日まで）や、職員の健康診断（安衛法に基づく）とは区別して覚えましょう。" },
-        { id: 33, category: "学校保健安全法", importance: 2, text: "学校には、学校医、学校歯科医及び(　33　)を置かなければならない。（大学を除く）（第23条）", answer: "学校薬剤師", explanation: "学校環境衛生（水質、換気、照明など）の維持管理のため、学校薬剤師の設置が義務付けられています。医師・歯科医だけでなく薬剤師も必置である点がポイントです。<br><span class='point-label'>【学習のポイント】</span>これらは非常勤職員として委嘱されることが一般的です。学校保健安全計画の立案にも参画します。" },
+        { id: 33, category: "学校保健安全法", importance: 2, text: "学校には、学校医、学校歯科医及び(　33　)を置かなければならない。（大学を除く）（第23条）", answer: "学校薬剤師", explanation: "学校環境衛生（水質、換気、照明など）の維持管理のため、学校薬剤師の設置が義務付けられています.医師・歯科医だけでなく薬剤師も必置である点がポイントです。<br><span class='point-label'>【学習のポイント】</span>これらは非常勤職員として委嘱されることが一般的です。学校保健安全計画の立案にも参画します。" },
         { id: 34, category: "学校保健安全法", importance: 3, text: "校長は、感染症にかかつており、かかつている疑いがあり、又はかかるおそれのある児童生徒等があるときは、...出席を(　34　)させることができる。（第19条）", answer: "停止", explanation: "感染症拡大防止のための「出席停止」措置です。この権限は「校長」にあります（性行不良による出席停止は教育委員会）。区別して覚えてください。<br><span class='point-label'>【学習のポイント】</span>出席停止期間は「欠席」扱いにはならず、「出席停止・忌引等」として処理されます。指導要録上の取り扱いも確認しましょう。" },
         { id: 35, category: "いじめ防止法", importance: 5, text: "いじめとは、...心理的又は(　35　)な影響を与える行為であって、当該行為の対象となった児童等が心身の苦痛を感じているものをいう。", answer: "物理的", explanation: "いじめの定義です。「一定の人的関係にある」こと、「心理的又は物理的な攻撃」であること、そして被害者が「心身の苦痛を感じている」ことが要件です。<br><span class='point-label'>【学習のポイント】</span>場所は学校内外を問いません。インターネット上の行為も含まれます。「けんか」や「ふざけ」に見えても、被害者が苦痛を感じていればいじめとなります。" },
         { id: 36, category: "いじめ防止法", importance: 4, text: "学校は、...当該学校の複数の教職員、心理、福祉等に関する専門的な知識を有する者その他の関係者により構成される(　36　)を置くものとする。（第22条）", answer: "いじめ対策組織", explanation: "学校におけるいじめ防止の中核となる常設組織です。「学校いじめ対策委員会」などと呼ばれます。教員だけで抱え込まず、組織的に対応するための仕組みです。<br><span class='point-label'>【学習のポイント】</span>スクールカウンセラー等の専門家を加えることが推奨されています。事案発生時だけでなく、未然防止や早期発見のための活動も行います。" },
@@ -697,11 +706,12 @@
     ];
 
     // --- アプリの状態管理 ---
+    const STORAGE_KEY = 'vp_drill_progress';
     let quizQueue = [];     
     let currentQuestion = null; 
     let totalQuestions = 0; 
     let solvedCount = 0;
-    let isSessionActive = false; // セッション継続中フラグ
+    let isSessionActive = false;
     
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -711,29 +721,63 @@
         return array;
     }
 
-    // 「最初から始める」ボタンが押されたとき
+    // --- データ保存・読み込み ---
+    function saveProgress() {
+        if (!isSessionActive) return;
+        const data = {
+            quizQueue: quizQueue,
+            currentQuestion: currentQuestion,
+            totalQuestions: totalQuestions,
+            solvedCount: solvedCount,
+            isSessionActive: isSessionActive
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadProgressCheck() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                if (data.isSessionActive && data.quizQueue && data.quizQueue.length > 0) {
+                    document.getElementById('btn-resume').style.display = 'block';
+                    return true;
+                }
+            } catch(e) {
+                console.error("Save data corrupted", e);
+            }
+        }
+        return false;
+    }
+
+    function clearProgress() {
+        localStorage.removeItem(STORAGE_KEY);
+    }
+
+    // --- イベントハンドラ ---
+
+    window.onload = function() {
+        loadProgressCheck();
+    };
+
     function tryStartQuiz() {
-        if (isSessionActive) {
-            // セッション中なら確認モーダルを出す
+        if (loadProgressCheck()) {
             document.getElementById('modal-overlay').classList.add('active');
         } else {
-            // セッション中でなければ即開始
             initAndStart();
         }
     }
 
-    // モーダルで「はい（リセット）」が押されたとき
     function confirmStartQuiz() {
         document.getElementById('modal-overlay').classList.remove('active');
+        clearProgress();
         initAndStart();
     }
 
-    // モーダルを閉じる
     function closeModal() {
         document.getElementById('modal-overlay').classList.remove('active');
     }
 
-    // 初期化して開始
     function initAndStart() {
         quizQueue = shuffle(questionData.map(q => ({id: q.id, isRetry: false})));
         totalQuestions = questionData.length;
@@ -743,9 +787,7 @@
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('question-screen').style.display = 'block';
         
-        // 「続きから」ボタンを表示状態にする（次回トップに戻ったときのため）
         document.getElementById('btn-resume').style.display = 'block';
-        // テキスト変更
         document.getElementById('btn-start').textContent = "最初から始める（リセット）";
         document.getElementById('btn-start').classList.add('btn-reset');
 
@@ -753,30 +795,61 @@
         showNextQuestion();
     }
 
-    // 「続きから再開」ボタンが押されたとき
     function resumeQuiz() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('question-screen').style.display = 'block';
-        // 状態は維持されているので、そのまま表示するだけでOK
-        // 入力欄にフォーカス
-        document.getElementById('user-input').focus();
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            quizQueue = data.quizQueue;
+            currentQuestion = data.currentQuestion;
+            totalQuestions = data.totalQuestions || questionData.length;
+            solvedCount = data.solvedCount;
+            isSessionActive = true;
+
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+            
+            document.getElementById('btn-start').textContent = "最初から始める（リセット）";
+            document.getElementById('btn-start').classList.add('btn-reset');
+
+            updateProgress();
+            
+            document.getElementById('user-input').value = '';
+            document.getElementById('user-input').disabled = false;
+            document.getElementById('btn-submit').disabled = false;
+            document.getElementById('btn-submit').style.display = 'block'; 
+            document.getElementById('feedback-section').style.display = 'none';
+            
+            document.getElementById('q-category').textContent = currentQuestion.category;
+            let stars = "★".repeat(currentQuestion.importance);
+            document.getElementById('q-stars').textContent = stars;
+            
+            let formattedText = currentQuestion.text.replace(/\(　\d+　\)/g, '<span class="blank-placeholder">？</span>');
+            formattedText = formattedText.replace(/\（\s*\d+\s*\）/g, '<span class="blank-placeholder">？</span>');
+            formattedText = formattedText.replace(/\n/g, '<br>');
+
+            document.getElementById('q-text').innerHTML = formattedText;
+
+            const reviewIndicator = document.getElementById('review-indicator');
+            if (currentQuestion.isRetry) {
+                reviewIndicator.classList.remove('hidden');
+            } else {
+                reviewIndicator.classList.add('hidden');
+            }
+
+            document.getElementById('user-input').focus();
+        }
     }
 
-    // トップへ戻る（一時中断）
     function goHome() {
-        // 確認なしで戻る
         document.getElementById('question-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'none';
         document.getElementById('start-screen').style.display = 'block';
-        
-        // 進捗情報は isSessionActive = true のまま保持される
+        loadProgressCheck(); 
     }
 
     function resetApp() {
-        // 結果画面からのトップ戻りは完全にリセット扱いで良いか、
-        // あるいは「完了」状態としてトップに戻るか。
-        // ここではリセットしてトップへ
         isSessionActive = false;
+        clearProgress();
         document.getElementById('btn-resume').style.display = 'none';
         document.getElementById('btn-start').textContent = "試験開始";
         document.getElementById('btn-start').classList.remove('btn-reset');
@@ -802,7 +875,8 @@
         
         currentQuestion = { ...qData, isRetry: nextQItem.isRetry };
 
-        // UIリセット
+        saveProgress();
+
         document.getElementById('user-input').value = '';
         document.getElementById('user-input').disabled = false;
         document.getElementById('btn-submit').disabled = false;
@@ -839,6 +913,7 @@
                 return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0);
             });
             s = s.replace(/\s+/g, '');
+            s = s.replace(/・/g, '');
             return s;
         };
 
@@ -860,7 +935,6 @@
             resultMsg.className = 'result-text correct-msg';
             
             if (!currentQuestion.isRetry) {
-                // 新規クリア
             } 
             solvedCount = totalQuestions - quizQueue.filter(x => !x.isRetry).length; 
 
@@ -869,16 +943,13 @@
             resultMsg.textContent = '不正解...';
             resultMsg.className = 'result-text incorrect-msg';
 
-            // ★ランダム再出題ロジック
-            // 3問後〜8問後の間のどこかにランダムで割り込ませる
-            // ただし、配列の長さが短い場合は末尾に追加
             let minDistance = 3;
             let maxDistance = 8;
             let queueLen = quizQueue.length;
             
             let insertPos;
             if (queueLen <= minDistance) {
-                insertPos = queueLen; // 末尾
+                insertPos = queueLen; 
             } else {
                 let randomOffset = Math.floor(Math.random() * (maxDistance - minDistance + 1)) + minDistance;
                 insertPos = Math.min(queueLen, randomOffset);
@@ -886,6 +957,8 @@
             
             quizQueue.splice(insertPos, 0, { id: currentQuestion.id, isRetry: true });
         }
+
+        saveProgress();
 
         document.getElementById('correct-answer-display').textContent = currentQuestion.answer;
         document.getElementById('explanation-text').innerHTML = currentQuestion.explanation;
@@ -899,7 +972,8 @@
     }
 
     function showResult() {
-        isSessionActive = false; // 終了したのでセッションクリア
+        isSessionActive = false;
+        clearProgress(); 
         document.getElementById('btn-resume').style.display = 'none';
         document.getElementById('btn-start').textContent = "試験開始";
         document.getElementById('btn-start').classList.remove('btn-reset');
