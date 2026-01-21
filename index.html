@@ -16,10 +16,14 @@
         --card-bg: #ffffff;
         --secondary-btn: #7f8c8d;
         --resume-btn: #e67e22;
+        --header-height: 50px;
+        --footer-height: 40px;
+        /* 追加: 問題文の背景色 */
+        --question-bg: #e1f5fe; /* 薄い水色 */
+        --question-border: #81d4fa; /* 枠線の水色 */
     }
 
     body {
-        /* UDフォントを採用 */
         font-family: "BIZ UDPGothic", "BIZ UDGothic", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
         background-color: var(--bg);
         color: #333;
@@ -27,9 +31,8 @@
         padding: 0;
         display: flex;
         justify-content: center;
-        min-height: 100vh;
-        
-        /* テキスト選択を禁止 */
+        height: 100vh;
+        overflow: hidden; 
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -39,43 +42,25 @@
     .app-container {
         width: 100%;
         max-width: 800px;
-        margin: 20px;
         background-color: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
         display: flex;
         flex-direction: column;
+        height: 100%;
         position: relative;
-        /* スマホで高さがいっぱいの時の調整 */
-        max-height: 95vh; 
-    }
-
-    @media (max-width: 600px) {
-        .app-container {
-            margin: 0;
-            border-radius: 0;
-            height: 100vh;
-            max-height: 100vh;
-        }
     }
 
     /* Header */
     header {
         background-color: var(--primary);
         color: white;
-        padding: 10px 15px; 
+        padding: 0 15px;
+        height: var(--header-height);
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-shrink: 0;
-    }
-
-    .header-left {
-        display: flex;
-        align-items: center;
-        overflow: hidden; 
-        flex: 1; 
+        z-index: 10;
     }
 
     h1 {
@@ -94,16 +79,57 @@
         padding: 2px 8px;
         border-radius: 10px;
         margin-left: 10px;
+        display: none; 
     }
 
     /* Content Area */
     .content {
-        padding: 20px;
         flex: 1;
         display: flex;
         flex-direction: column;
-        overflow-y: auto; /* ここでスクロール */
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Start Screen & Result Screen */
+    #start-screen, #result-screen {
+        padding: 20px;
+        overflow-y: auto;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    
+    #result-screen {
+        display: none; 
+    }
+
+    /* Question Screen (Split View) */
+    #question-screen {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* --- 上部：固定問題文エリア --- */
+    .question-area-fixed {
+        flex-shrink: 0;
+        padding: 15px;
+        background-color: #fff; /* 背景は白 */
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        z-index: 5;
+        max-height: 45%; /* 少し広げました */
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+    }
+
+    /* --- 下部：スクロール可能エリア --- */
+    .answer-area-scroll {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        background-color: #fff;
     }
 
     /* Footer */
@@ -111,371 +137,172 @@
         background-color: #f8f9fa;
         color: #7f8c8d;
         text-align: center;
-        padding: 10px;
+        height: var(--footer-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 0.8rem;
         border-top: 1px solid #eee;
         font-weight: bold;
         flex-shrink: 0;
     }
 
-    /* Start Screen */
-    #start-screen {
-        text-align: center;
-        padding: 20px;
-    }
-
-    /* タイトルスタイル（サイズ調整） */
+    /* Elements */
     .main-title {
         color: #d35400;
         border-bottom: 3px solid #e67e22;
         padding-bottom: 15px;
         margin-bottom: 20px;
-        font-size: 1.8rem; /* 少し小さくしました */
+        font-size: 1.8rem; 
         line-height: 1.4;
         font-weight: 800;
     }
 
     @media (max-width: 600px) {
-        .main-title {
-            font-size: 1.4rem; /* スマホでも2行に収まりやすいサイズへ調整 */
-        }
+        .main-title { font-size: 1.4rem; }
     }
     
-    .intro-text {
-        margin-bottom: 20px;
-        color: #666;
-        text-align: left;
-    }
+    .intro-text { margin-bottom: 20px; color: #666; text-align: left; }
 
-    /* ボタン群 */
     .btn-container {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        max-width: 400px;
-        margin: 0 auto 30px auto;
+        display: flex; flex-direction: column; gap: 15px;
+        max-width: 400px; margin: 0 auto 30px auto;
     }
 
     .btn-large {
-        display: block;
-        width: 100%;
-        padding: 15px;
-        background-color: var(--accent);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        cursor: pointer;
+        display: block; width: 100%; padding: 15px;
+        background-color: var(--accent); color: white;
+        border: none; border-radius: 8px; font-size: 1.2rem;
+        font-weight: bold; cursor: pointer;
         transition: background 0.2s, transform 0.1s;
     }
-
-    .btn-large:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-    }
-
-    .btn-resume {
-        background-color: var(--resume-btn);
-        font-size: 1.3rem;
-    }
-    
-    .btn-resume:hover {
-        background-color: #d35400;
-    }
-
-    .btn-reset {
-        background-color: var(--secondary-btn);
-        font-size: 1.0rem;
-    }
-
-    .btn-reset:hover {
-        background-color: #95a5a6;
-    }
+    .btn-large:hover { background-color: #2980b9; transform: translateY(-2px); }
+    .btn-resume { background-color: var(--resume-btn); font-size: 1.3rem; }
+    .btn-resume:hover { background-color: #d35400; }
+    .btn-reset { background-color: var(--secondary-btn); font-size: 1.0rem; }
+    .btn-reset:hover { background-color: #95a5a6; }
 
     .disclaimer {
-        font-size: 0.8rem;
-        color: #7f8c8d;
-        margin-top: 20px;
-        line-height: 1.4;
-        background-color: #f2f2f2;
-        padding: 10px;
-        border-radius: 4px;
-        user-select: none;
-    }
-
-    /* Question Screen */
-    #question-screen {
-        display: none;
+        font-size: 0.8rem; color: #7f8c8d; margin-top: 20px;
+        line-height: 1.4; background-color: #f2f2f2; padding: 10px;
+        border-radius: 4px; user-select: none;
     }
 
     .meta-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 8px; font-size: 0.9rem;
     }
-
     .category-badge {
-        display: inline-block;
-        background-color: #ecf0f1;
-        color: #7f8c8d;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.8rem;
+        display: inline-block; background-color: #ecf0f1; color: #7f8c8d;
+        padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;
     }
+    .importance-stars { color: var(--star); font-weight: bold; }
 
-    .importance-stars {
-        color: var(--star);
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-
-    /* 問題文エリア：高さ制限・スクロール対応 */
+    /* ★変更点：問題文エリアのデザイン */
     .question-text {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        margin-bottom: 15px;
-        border: 3px solid var(--accent);
-        border-radius: 10px;
-        background-color: #eef9ff;
+        font-size: 1.1rem; 
+        line-height: 1.8; 
+        margin-bottom: 0;
+        background-color: var(--question-bg); /* 薄い水色 */
         padding: 15px;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-        
-        /* 高さ制限とスクロール */
-        max-height: 35vh; 
-        overflow-y: auto; 
-        -webkit-overflow-scrolling: touch; 
+        border-radius: 8px;
+        border: 2px solid var(--question-border); /* 水色の枠線 */
+        color: #2c3e50;
     }
 
     .blank-placeholder {
-        display: inline-block;
-        min-width: 60px;
-        border-bottom: 2px solid var(--primary);
-        color: var(--accent);
-        font-weight: bold;
-        text-align: center;
-        padding: 0 5px;
+        display: inline-block; min-width: 60px;
+        border-bottom: 2px solid #0277bd; /* 濃い青の下線 */
+        color: #d35400; /* 空欄の色を目立たせる */
+        font-weight: bold; text-align: center; padding: 0 5px;
+        background-color: rgba(255,255,255,0.6); /* 空欄部分を少し白く */
+        border-radius: 4px;
     }
 
-    .input-area {
-        margin-bottom: 15px;
-        padding-bottom: 5px; 
-    }
-
+    .input-area { margin-bottom: 20px; margin-top: 10px; }
     input[type="text"] {
-        width: 100%;
-        padding: 12px;
-        font-size: 1.1rem;
-        border: 2px solid #ddd;
-        border-radius: 6px;
-        box-sizing: border-box;
-        outline: none;
-        transition: border-color 0.3s;
-        -webkit-user-select: text;
-        -moz-user-select: text;
-        -ms-user-select: text;
-        user-select: text;
+        width: 100%; padding: 15px; font-size: 1.2rem;
+        border: 2px solid #ddd; border-radius: 6px; box-sizing: border-box;
+        outline: none; transition: border-color 0.3s;
+        -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text;
         font-family: inherit;
     }
-
-    input[type="text"]:focus {
-        border-color: var(--accent);
-    }
+    input[type="text"]:focus { border-color: var(--accent); }
 
     .btn-submit {
-        width: 100%;
-        padding: 12px;
-        background-color: var(--success);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        min-height: 48px;
+        width: 100%; padding: 15px; background-color: var(--success);
+        color: white; border: none; border-radius: 6px; font-size: 1.2rem;
+        font-weight: bold; cursor: pointer; margin-bottom: 20px;
     }
+    .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
 
-    .btn-submit:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-
-    /* Feedback Section */
     #feedback-section {
-        display: none;
-        margin-top: 15px;
-        border-top: 1px solid #eee;
-        padding-top: 15px;
-        animation: fadeIn 0.3s ease;
-        padding-bottom: 40px; 
+        display: none; border-top: 2px dashed #eee; padding-top: 20px;
+        animation: fadeIn 0.3s ease; padding-bottom: 40px;
     }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .result-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .result-icon {
-        font-size: 2rem;
-        margin-right: 10px;
-    }
-
-    .result-text {
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
-
+    .result-header { display: flex; align-items: center; margin-bottom: 10px; }
+    .result-icon { font-size: 2rem; margin-right: 10px; }
+    .result-text { font-size: 1.2rem; font-weight: bold; }
     .correct-msg { color: var(--success); }
     .incorrect-msg { color: var(--error); }
 
     .answer-display {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
+        font-size: 1.1rem; margin-bottom: 15px; padding: 10px;
+        background-color: #fdfdfd; border-left: 4px solid #333;
     }
     .answer-label { font-weight: bold; color: #666; font-size: 0.9rem;}
-    .correct-answer { color: var(--success); font-weight: bold; font-size: 1.3rem;}
+    .correct-answer { color: var(--success); font-weight: bold; font-size: 1.3rem; margin-left: 10px;}
 
     .explanation-box {
-        background-color: #f8f9fa;
-        padding: 15px;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        line-height: 1.7;
-        margin-bottom: 20px;
+        background-color: #f8f9fa; padding: 15px; border-radius: 6px;
+        font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;
         border-left: 4px solid #bdc3c7;
     }
-    
     .point-label {
-        font-weight: bold;
-        color: #e67e22;
-        margin-top: 15px;
-        display: block;
-        border-top: 1px dashed #ccc;
-        padding-top: 10px;
+        font-weight: bold; color: #e67e22; margin-top: 15px;
+        display: block; border-top: 1px dashed #ccc; padding-top: 10px;
     }
 
-    /* ボタンエリアのレイアウト */
-    .feedback-actions {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
+    .feedback-actions { display: flex; gap: 10px; margin-bottom: 20px; }
     .btn-next {
-        flex: 2;
-        padding: 12px;
-        background-color: var(--accent);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        cursor: pointer;
-        min-height: 48px;
+        flex: 2; padding: 15px; background-color: var(--accent);
+        color: white; border: none; border-radius: 6px; font-size: 1.1rem;
+        font-weight: bold; cursor: pointer;
     }
-
     .btn-home-action {
-        flex: 1;
-        padding: 12px;
-        background-color: var(--secondary-btn);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 1.0rem;
-        font-weight: bold;
-        cursor: pointer;
-        min-height: 48px;
+        flex: 1; padding: 15px; background-color: var(--secondary-btn);
+        color: white; border: none; border-radius: 6px; font-size: 1.0rem;
+        font-weight: bold; cursor: pointer;
     }
+    .btn-home-action:hover { background-color: #95a5a6; }
 
-    .btn-home-action:hover {
-        background-color: #95a5a6;
-    }
-    
     .review-notice {
-        background-color: #fff3cd;
-        color: #856404;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 10px;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-    }
-
-    /* Result Screen */
-    #result-screen {
-        display: none;
-        text-align: center;
-        padding: 40px 20px;
+        background-color: #fff3cd; color: #856404; padding: 8px;
+        border-radius: 4px; margin-bottom: 10px; font-size: 0.85rem;
+        display: flex; align-items: center;
     }
 
     .score-display {
-        font-size: 3rem;
-        font-weight: bold;
-        color: var(--primary);
-        margin: 20px 0;
+        font-size: 3rem; font-weight: bold; color: var(--primary); margin: 20px 0;
     }
+    .stats { margin-bottom: 30px; color: #666; }
 
-    .stats {
-        margin-bottom: 30px;
-        color: #666;
-    }
-
-    /* Modal for Reset Confirmation */
+    /* Modal */
     #modal-overlay {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-        display: none; /* 初期状態は非表示 */
-        justify-content: center;
-        align-items: center;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 9999;
+        display: none; justify-content: center; align-items: center;
     }
-    #modal-overlay.active {
-        display: flex; /* アクティブ時に表示 */
-    }
+    #modal-overlay.active { display: flex; }
     .modal-box {
-        background: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        width: 90%;
-        max-width: 400px;
+        background: #fff; padding: 30px; border-radius: 8px; text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2); width: 90%; max-width: 400px;
     }
-    .modal-actions {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-    .btn-modal-yes {
-        background: #e74c3c;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .btn-modal-no {
-        background: #95a5a6;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    /* Utilities */
+    .modal-actions { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+    .btn-modal-yes { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    .btn-modal-no { background: #95a5a6; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
     .hidden { display: none; }
 </style>
 </head>
@@ -486,7 +313,7 @@
         <div class="header-left">
             <h1>教頭試験（管理職選考試験）対策ドリル</h1>
         </div>
-        <div class="progress-info" id="progress-display">準備中...</div>
+        <div class="progress-info" id="progress-display"></div>
     </header>
 
     <div class="content">
@@ -509,9 +336,7 @@
             </div>
 
             <div class="btn-container">
-                <!-- 続きからボタン（初期は非表示） -->
                 <button id="btn-resume" class="btn-large btn-resume" onclick="resumeQuiz()" style="display:none;">▶ 続きから再開する</button>
-                <!-- 最初からボタン -->
                 <button id="btn-start" class="btn-large" onclick="tryStartQuiz()">最初から始める</button>
             </div>
             
@@ -520,48 +345,51 @@
             </p>
         </div>
 
-        <!-- Question Screen -->
+        <!-- Question Screen (Split View) -->
         <div id="question-screen">
-            <div id="review-indicator" class="review-notice hidden">
-                <span>🔄 復習：以前間違えた問題です。今度こそ正解しましょう！</span>
-            </div>
-            <div class="meta-info">
-                <span class="category-badge" id="q-category">カテゴリ</span>
-                <span class="importance-stars" id="q-stars"></span>
-            </div>
-            
-            <!-- 問題文エリア：高さ制限・スクロール対応 -->
-            <div class="question-text" id="q-text">
-                ここに問題文が表示されます。
-            </div>
-
-            <!-- スマホキーボード対策：問題文を見ながら入力できるように -->
-            <div class="input-area">
-                <input type="text" id="user-input" placeholder="答えを入力..." autocomplete="off">
-            </div>
-
-            <button id="btn-submit" class="btn-submit" onclick="submitAnswer()">回答する</button>
-
-            <!-- Feedback / Explanation -->
-            <div id="feedback-section">
-                <div class="result-header">
-                    <span id="result-icon" class="result-icon"></span>
-                    <span id="result-msg" class="result-text"></span>
+            <!-- 固定エリア：問題文 -->
+            <div class="question-area-fixed">
+                <div id="review-indicator" class="review-notice hidden">
+                    <span>🔄 復習：以前間違えた問題です。今度こそ正解しましょう！</span>
                 </div>
-                
-                <div class="answer-display">
-                    <div class="answer-label">正解：</div>
-                    <div id="correct-answer-display" class="correct-answer"></div>
+                <div class="meta-info">
+                    <span class="category-badge" id="q-category">カテゴリ</span>
+                    <span class="importance-stars" id="q-stars"></span>
+                </div>
+                <div class="question-text" id="q-text">
+                    ここに問題文が表示されます。
+                </div>
+            </div>
+
+            <!-- スクロールエリア：解答・解説 -->
+            <div class="answer-area-scroll">
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="答えを入力..." autocomplete="off">
                 </div>
 
-                <div class="explanation-box">
-                    <div class="answer-label" style="margin-bottom:5px;">解説・ポイント：</div>
-                    <div id="explanation-text"></div>
-                </div>
+                <button id="btn-submit" class="btn-submit" onclick="submitAnswer()">回答する</button>
 
-                <div class="feedback-actions">
-                    <button id="btn-next" class="btn-next" onclick="nextQuestion()">次の問題へ</button>
-                    <button type="button" id="btn-home-action" class="btn-home-action" onclick="goHome()">🏠 トップ</button>
+                <!-- Feedback / Explanation -->
+                <div id="feedback-section">
+                    <div class="result-header">
+                        <span id="result-icon" class="result-icon"></span>
+                        <span id="result-msg" class="result-text"></span>
+                    </div>
+                    
+                    <div class="answer-display">
+                        <div class="answer-label">正解：</div>
+                        <div id="correct-answer-display" class="correct-answer"></div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <div class="answer-label" style="margin-bottom:5px;">解説・ポイント：</div>
+                        <div id="explanation-text"></div>
+                    </div>
+
+                    <div class="feedback-actions">
+                        <button id="btn-next" class="btn-next" onclick="nextQuestion()">次の問題へ</button>
+                        <button type="button" id="btn-home-action" class="btn-home-action" onclick="goHome()">🏠 トップ</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -604,10 +432,7 @@
     });
     document.addEventListener('copy', function(e) { e.preventDefault(); });
     document.addEventListener('cut', function(e) { e.preventDefault(); });
-    document.addEventListener('paste', function(e) { 
-        e.preventDefault(); 
-    });
-
+    document.addEventListener('paste', function(e) { e.preventDefault(); });
 
     // --- 100問のデータ (全データ) ---
     const questionData = [
@@ -699,8 +524,8 @@
         { id: 85, category: "著作権法", importance: 3, text: "授業目的公衆送信補償金制度により、学校等の設置者が補償金を支払うことで、授業目的で著作物を(　85　)（オンライン配信等）することが可能となった。", answer: "公衆送信", explanation: "コロナ禍のオンライン授業普及に伴い整備された制度です。以前は個別に許諾が必要でしたが、現在は補償金を支払えば、授業目的での資料のメール送信やサーバーアップロードが可能です。<br><span class='point-label'>【学習のポイント】</span>「授業目的」かつ「必要と認められる限度」である必要があります。誰でも見られる状態にする（オープンなHPへの掲載など）は対象外です。" },
         { id: 86, category: "人権教育", importance: 3, text: "人権教育の目標は、自分の大切さとともに他の人の大切さを認めることのできるようになり、それが様々な場面や状況下での具体的な態度や(　86　)に現れるようにすることである。", answer: "行動", explanation: "人権教育は、知識として知っているだけでなく、実際の生活の中で人権尊重の「行動」がとれるようになることを目指します。<br><span class='point-label'>【学習のポイント】</span>「人権感覚」の育成がキーワードです。頭での理解だけでなく、差別をおかしいと感じる感性や、解決しようとする実践力を育てます。" },
         { id: 87, category: "子どもの権利条約", importance: 3, text: "児童の権利に関する条約において、児童は、自分に関係のあるすべての事項について自由に(　87　)を表明する権利を確保される。（第12条）", answer: "自己の意見", explanation: "「意見表明権」です。子供を一人の人間（権利の主体）として尊重し、その意見に耳を傾けることを求めています。こども基本法にも引き継がれています。<br><span class='point-label'>【学習のポイント】</span>条約の4原則は「差別の禁止」「最善の利益」「生命・生存・発達の権利」「意見の尊重」です。" },
-        { id: 88, category: "地公法", importance: 2, text: "職員は、職務の遂行に当たっては、(　88　)してはならない。（不当な差別的取扱いの禁止）", answer: "不当に差別", explanation: "平等取扱いの原則（第13条）です。人種、信条、性別、社会的身分、門地等により、差別的な取り扱いをしてはなりません。憲法14条の行政上の発露です。<br><span class='point-label'>【学習のポイント】</span>住民に対して公平に接する義務です。特定の有力者に便宜を図るような行為はこれに反し、信用失墜行為ともなります。" },
-        { id: 89, category: "地公法", importance: 2, text: "職員の分限及び懲戒に関する条例には、その処分に対する不服申立ての手続を含まなければならない。不服申立ては(　89　)に対して行う。", answer: "人事委員会", explanation: "処分を受けた職員の救済措置です。処分に不服がある場合、公平な第三者機関である人事委員会（または公平委員会）に審査請求ができます。<br><span class='point-label'>【学習のポイント】</span>審査請求期間は、処分説明書を受けた日の翌日から3ヶ月以内です。この決定を経ずに裁判所への出訴は原則できません（不服申立前置主義の例外など専門的な話もありますが、まずは人事委員会への請求が基本です）。" },
+        { id: 88, category: "地公法", importance: 2, text: "職員は、職務の遂行に当たっては、(　88　)してはならない。（不当な差別的取扱いの禁止）", answer: "不当に差別", explanation: "平等取扱いの原則（第13条）です。人種、信条、性別、社会的身分、門地等により、差別的な取り扱いをしてはなりません.憲法14条の行政上の発露です。<br><span class='point-label'>【学習のポイント】</span>住民に対して公平に接する義務です。特定の有力者に便宜を図るような行為はこれに反し、信用失墜行為ともなります。" },
+        { id: 89, category: "地公法", importance: 2, text: "職員の分限及び懲戒に関する条例には、その処分に対する不服申立ての手続を含まなければならない.不服申立ては(　89　)に対して行う。", answer: "人事委員会", explanation: "処分を受けた職員の救済措置です。処分に不服がある場合、公平な第三者機関である人事委員会（または公平委員会）に審査請求ができます。<br><span class='point-label'>【学習のポイント】</span>審査請求期間は、処分説明書を受けた日の翌日から3ヶ月以内です。この決定を経ずに裁判所への出訴は原則できません（不服申立前置主義の例外など専門的な話もありますが、まずは人事委員会への請求が基本です）。" },
         { id: 90, category: "学校教育法", importance: 2, text: "学校は、(　90　)を短縮してはならない。（特例を除く）", answer: "修業年限", explanation: "小学校は6年、中学校は3年といった修業年限は法律で定まっており、勝手に短縮できません。ただし、飛び級（特定の分野で特に優れた能力がある場合）などの特例はあります。<br><span class='point-label'>【学習のポイント】</span>教育課程の「授業時数」と混同しないように。授業時数は学習指導要領で標準が定められています。" },
         { id: 91, category: "学校教育法", importance: 3, text: "学齢児童とは、満6歳に達した日の翌日以後における最初の(　91　)から満12歳に達した日の属する年度の終わりまでの者。", answer: "4月1日", explanation: "義務教育の開始時期（就学義務の始期）を定義しています。「満6歳に達した日」とは誕生日の前日（年齢計算ニ関スル法律）なので、4月1日生まれは早生まれとして前の学年に入ります。<br><span class='point-label'>【学習のポイント】</span>この期間、保護者には就学義務が生じます。病弱や発育不全などの場合は、就学猶予や免除の制度があります。" },
         { id: 92, category: "学校教育法", importance: 3, text: "校長は、児童等の入学、卒業等を認める権限を持つが、公立義務教育諸学校の(　92　)については、教育委員会の通知に基づく。", answer: "入学", explanation: "公立小中学校の入学（どの学校に入るか）を指定するのは市町村教育委員会です（就学指定）。校長は指定された児童生徒を受け入れます。転学も同様です。<br><span class='point-label'>【学習のポイント】</span>一方、「卒業」の認定（各学年の課程修了の認定も）は校長の権限です。校長は指導要録に基づき認定を行います。" },
@@ -715,7 +540,7 @@
     ];
 
     // --- アプリの状態管理 ---
-    const STORAGE_KEY = 'vp_drill_progress';
+    const STORAGE_KEY = 'vp_drill_progress_v2';
     let quizQueue = [];     
     let currentQuestion = null; 
     let totalQuestions = 0; 
@@ -794,7 +619,7 @@
         isSessionActive = true;
 
         document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('question-screen').style.display = 'block';
+        document.getElementById('question-screen').style.display = 'flex'; // flexに変更
         
         document.getElementById('btn-resume').style.display = 'block';
         document.getElementById('btn-start').textContent = "最初から始める（リセット）";
@@ -815,13 +640,14 @@
             isSessionActive = true;
 
             document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('question-screen').style.display = 'block';
+            document.getElementById('question-screen').style.display = 'flex'; // flexに変更
             
             document.getElementById('btn-start').textContent = "最初から始める（リセット）";
             document.getElementById('btn-start').classList.add('btn-reset');
 
             updateProgress();
             
+            // UI復帰
             document.getElementById('user-input').value = '';
             document.getElementById('user-input').disabled = false;
             document.getElementById('btn-submit').disabled = false;
@@ -844,9 +670,12 @@
             } else {
                 reviewIndicator.classList.add('hidden');
             }
+            
+            // スクロール位置を一番上へ
+            document.querySelector('.question-area-fixed').scrollTop = 0;
+            document.querySelector('.answer-area-scroll').scrollTop = 0;
 
-            // Do not focus automatically on resume to avoid keyboard popping up
-            // document.getElementById('user-input').focus();
+            // フォーカスはしない（キーボードを出さない）
         }
     }
 
@@ -910,8 +739,11 @@
             reviewIndicator.classList.add('hidden');
         }
 
-        // Removed automatic focus to prevent keyboard popup
-        // document.getElementById('user-input').focus();
+        // スクロール位置リセット
+        document.querySelector('.question-area-fixed').scrollTop = 0;
+        document.querySelector('.answer-area-scroll').scrollTop = 0;
+
+        // ★自動フォーカス削除
     }
 
     function submitAnswer() {
@@ -975,8 +807,7 @@
         document.getElementById('explanation-text').innerHTML = currentQuestion.explanation;
 
         updateProgress();
-        // Removed focus on next button to prevent scroll jump or unwanted behavior
-        // document.getElementById('btn-next').focus();
+        // 自動フォーカス削除
     }
 
     function nextQuestion() {
@@ -1000,12 +831,10 @@
             const submitBtn = document.getElementById('btn-submit');
             const nextBtn = document.getElementById('btn-next');
             
-            // Allow Enter to submit if input is focused and button is visible
             if (document.activeElement === document.getElementById('user-input') && submitBtn.style.display !== 'none') {
                 submitAnswer();
             } 
-            // Allow Enter to go next only if feedback is visible
-            else if (document.getElementById('feedback-section').style.display !== 'none' && nextBtn.offsetParent !== null) { 
+            else if (nextBtn.offsetParent !== null && document.getElementById('feedback-section').style.display !== 'none') { 
                 nextQuestion();
             }
         }
