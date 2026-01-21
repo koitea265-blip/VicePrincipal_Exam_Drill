@@ -68,14 +68,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-shrink: 0; /* 縮小させない */
+        flex-shrink: 0;
     }
 
     .header-left {
         display: flex;
         align-items: center;
         overflow: hidden; 
-        flex: 1; /* 左側を伸ばす */
+        flex: 1; 
     }
 
     h1 {
@@ -124,20 +124,20 @@
         padding: 20px;
     }
 
-    /* タイトルスタイル */
+    /* タイトルスタイル（サイズ調整） */
     .main-title {
         color: #d35400;
         border-bottom: 3px solid #e67e22;
         padding-bottom: 15px;
         margin-bottom: 20px;
-        font-size: 2.0rem; 
-        line-height: 1.3;
+        font-size: 1.8rem; /* 少し小さくしました */
+        line-height: 1.4;
         font-weight: 800;
     }
 
     @media (max-width: 600px) {
         .main-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem; /* スマホでも2行に収まりやすいサイズへ調整 */
         }
     }
     
@@ -207,7 +207,6 @@
     /* Question Screen */
     #question-screen {
         display: none;
-        /* コンテンツ領域内での表示にするためheight:100%は削除 */
     }
 
     .meta-info {
@@ -244,8 +243,8 @@
         box-shadow: 0 3px 6px rgba(0,0,0,0.05);
         
         /* 高さ制限とスクロール */
-        max-height: 35vh; /* 画面の35%程度に制限 */
-        overflow-y: auto; /* 縦スクロール */
+        max-height: 35vh; 
+        overflow-y: auto; 
         -webkit-overflow-scrolling: touch; 
     }
 
@@ -261,7 +260,6 @@
 
     .input-area {
         margin-bottom: 15px;
-        /* 入力欄より下をスクロールさせるためのマージン確保 */
         padding-bottom: 5px; 
     }
 
@@ -274,7 +272,6 @@
         box-sizing: border-box;
         outline: none;
         transition: border-color 0.3s;
-        /* 入力エリアのみテキスト選択・編集を許可 */
         -webkit-user-select: text;
         -moz-user-select: text;
         -ms-user-select: text;
@@ -296,7 +293,6 @@
         font-size: 1.1rem;
         font-weight: bold;
         cursor: pointer;
-        /* スマホでのタップしやすさ */
         min-height: 48px;
     }
 
@@ -312,8 +308,7 @@
         border-top: 1px solid #eee;
         padding-top: 15px;
         animation: fadeIn 0.3s ease;
-        /* 解説部分も長くなったらスクロールできるように */
-        padding-bottom: 40px; /* 下部に余白 */
+        padding-bottom: 40px; 
     }
 
     @keyframes fadeIn {
@@ -657,10 +652,10 @@
         { id: 38, category: "地方教育行政法", importance: 4, text: "教育長は、教育委員会の(　38　)を総理し、教育委員会を代表する。（第13条）", answer: "会務", explanation: "新教育長制度（H27改正）により、教育委員長と旧教育長が一本化されました。教育長は教育委員会の責任者として、事務局の事務を統括し、対外的に代表します。<br><span class='point-label'>【学習のポイント】</span>教育長は常勤で、任期は3年です。教育委員会の会議を招集する権限も教育長にあります。" },
         { id: 39, category: "地方教育行政法", importance: 3, text: "教育委員会は、当該地方公共団体が設置する学校その他の教育機関を(　39　)し、学校の設置、管理及び廃止に関することを行う。", answer: "管理", explanation: "学校の「設置者」である教育委員会の権限です。「管理」には、施設設備の維持管理だけでなく、教育課程の編成に関する指導助言などの内容的な管理も含まれます。<br><span class='point-label'>【学習のポイント】</span>教職員の人事権（県費負担教職員の場合は都道府県教委）も管理権限の一部です。学校における管理権（校長）との役割分担を理解しましょう。" },
         { id: 40, category: "地方教育行政法", importance: 3, text: "県費負担教職員の任免、分限、懲戒などは、市町村委員会の内申を待って、(　40　)が行う。", answer: "都道府県委員会", explanation: "市町村立学校の教員であっても、給与を県が負担する「県費負担教職員」の任命権は都道府県教育委員会にあります。ただし、日常的な服務監督権は市町村教委と校長にあります。<br><span class='point-label'>【学習のポイント】</span>「内申」という手続きが重要です。市町村教委の意向を無視して県が勝手に人事をすることはできません。政令指定都市では市に移譲されています。" },
-        { id: 41, category: "学習指導要領", importance: 5, text: "各学校においては、...教育課程の編成、実施、評価、改善を繰り返すプロセス（(　41　)）を確立すること。", answer: "カリキュラム・マネジメント", explanation: "教育課程を中心に据え、組織的・計画的に学校教育の質を高める手法です。PDCAサイクルを回すこと、資源（ヒト・モノ・カネ）の効果的活用、地域との連携が３つの柱です。<br><span class='point-label'>【学習のポイント】</span>単なる計画作りではなく、「改善」に繋げることが肝要です。教科横断的な視点も重視されています。" },
+        { id: 41, category: "学習指導要領", importance: 5, text: "各学校においては、...教育課程の編成、実施、評価、改善を繰り返すプロセス（(　41　)）を確立すること。", answer: "カリキュラム・マネジメント", explanation: "教育課程を中心に据え、組織的・計画的に学校教育の質を高める手法です.PDCAサイクルを回すこと、資源（ヒト・モノ・カネ）の効果的活用、地域との連携が３つの柱です。<br><span class='point-label'>【学習のポイント】</span>単なる計画作りではなく、「改善」に繋げることが肝要です。教科横断的な視点も重視されています。" },
         { id: 42, category: "学習指導要領", importance: 5, text: "生徒の(　42　)の視点から、教育課程の実施状況の評価及び改善を組織的かつ計画的に図り、学習の質の向上に向けた授業改善を行うこと。", answer: "主体的・対話的で深い学び", explanation: "いわゆる「アクティブ・ラーニング」の視点による授業改善です。型を真似るのではなく、子供たちが主体的に学び、対話を通じて考えを広げ、深い理解に至るプロセスを重視します。<br><span class='point-label'>【学習のポイント】</span>「主体的」「対話的」「深い」の３要素それぞれの定義を確認しましょう。特に「深い学び」は習得した知識を活用・発揮する段階を指します。" },
         { id: 43, category: "学習指導要領", importance: 4, text: "学校が社会と連携・協働しながら、未来の創り手となるために必要な資質・能力を育む「(　43　)」の実現を目指す。", answer: "社会に開かれた教育課程", explanation: "現行学習指導要領の理念的スローガンです。学校内だけでなく、社会や地域と目標を共有し、連携して子供を育てる姿勢を示しています。<br><span class='point-label'>【学習のポイント】</span>①社会と目標を共有する、②社会との連携・協働、③学校教育を通じてよりよい社会を創る、の3点が要素です。" },
-        { id: 44, category: "学習指導要領", importance: 3, text: "総合的な学習の時間の目標：(　44　)な見方・考え方を働かせ、横断的・総合的な学習を行うことを通して、よりよく課題を解決し、自己の生き方を考えていくための資質・能力を育成する。", answer: "探究的", explanation: "総合的な学習の時間のキーワードは「探究」です。課題の設定→情報の収集→整理・分析→まとめ・表現という一連のプロセスを繰り返す学習活動です。<br><span class='point-label'>【学習のポイント】</span>教え込みではなく、子供自身が問いを立てて解決に向かう姿勢を育てます。SDGsなどの現代的な課題とも相性が良いです。" },
+        { id: 44, category: "学習指導要領", importance: 3, text: "総合的な学習の時間の目標：(　44　)な見方・考え方を働かせ、横断的・総合的な学習を行うことを通して、よりよく課題を解決し、自己の生き方を考えていくための資質・能力を育成する。", answer: "探究的", explanation: "総合的な学習の時間のキーワードは「探究」です。課題の設定→情報の収集→整理・分析→まとめ・表現という一連のプロセスを繰り返す学習活動です。<br><span class='point-label'>【学習のポイント】</span>教え込みではなく、子供自身が問いを立てて解決に向かう姿勢を育てます.SDGsなどの現代的な課題とも相性が良いです。" },
         { id: 45, category: "学習指導要領", importance: 3, text: "小学校学習指導要領において、特別活動は、学級活動、児童会活動、(　45　)及び学校行事で構成する。", answer: "クラブ活動", explanation: "特別活動の4領域の一つです。異年齢集団（4年生以上）による共通の興味・関心に基づいた自発的な活動です。中学校にはクラブ活動はなく「生徒会活動」等に含まれます。<br><span class='point-label'>【学習のポイント】</span>部活動（教育課程外）とは異なります。クラブ活動は教育課程内の必修活動です。自主性と社会性の育成が主なねらいです。" },
         { id: 46, category: "教育職員免許法", importance: 3, text: "免許状は、普通免許状、(　46　)及び臨時免許状とする。（第4条）", answer: "特別免許状", explanation: "多様な人材を学校に招くための免許状です。教員免許を持たない社会人等でも、専門的な知識経験があれば、都道府県教委の検定を経て授与されます。<br><span class='point-label'>【学習のポイント】</span>有効期間は10年以上で、授与された都道府県内でのみ有効です。授与件数は増加傾向にあります。" },
         { id: 47, category: "教育職員免許法", importance: 3, text: "令和4年7月1日の法改正により教員免許更新制は廃止され、現在、普通免許状は(　47　)（有効期間の定めがない）となった。", answer: "無期限", explanation: "更新制の廃止により、普通免許状及び特別免許状は、有効期間のない（無期限の）免許状となりました。これにより、10年ごとの講習受講と更新手続きは不要となりました。<br><span class='point-label'>【学習のポイント】</span>更新制廃止の代わりに、任命権者が研修記録を作成・活用する「新たな教師の学びの姿」が始まっています。休眠免許の扱いなどの経過措置も確認しておくと安心です。" },
@@ -850,7 +845,8 @@
                 reviewIndicator.classList.add('hidden');
             }
 
-            document.getElementById('user-input').focus();
+            // Do not focus automatically on resume to avoid keyboard popping up
+            // document.getElementById('user-input').focus();
         }
     }
 
@@ -914,7 +910,8 @@
             reviewIndicator.classList.add('hidden');
         }
 
-        document.getElementById('user-input').focus();
+        // Removed automatic focus to prevent keyboard popup
+        // document.getElementById('user-input').focus();
     }
 
     function submitAnswer() {
@@ -978,7 +975,8 @@
         document.getElementById('explanation-text').innerHTML = currentQuestion.explanation;
 
         updateProgress();
-        document.getElementById('btn-next').focus();
+        // Removed focus on next button to prevent scroll jump or unwanted behavior
+        // document.getElementById('btn-next').focus();
     }
 
     function nextQuestion() {
@@ -1002,10 +1000,12 @@
             const submitBtn = document.getElementById('btn-submit');
             const nextBtn = document.getElementById('btn-next');
             
+            // Allow Enter to submit if input is focused and button is visible
             if (document.activeElement === document.getElementById('user-input') && submitBtn.style.display !== 'none') {
                 submitAnswer();
             } 
-            else if (nextBtn.offsetParent !== null) { 
+            // Allow Enter to go next only if feedback is visible
+            else if (document.getElementById('feedback-section').style.display !== 'none' && nextBtn.offsetParent !== null) { 
                 nextQuestion();
             }
         }
